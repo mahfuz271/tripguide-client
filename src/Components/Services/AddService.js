@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../Contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import useDocumentTitle from '../../Layout/useDocumentTitle';
 
 const AddService = () => {
+    useDocumentTitle("Add service");
     const navigate = useNavigate();
     const { user, setLoading, loading, logOut } = useContext(AuthContext);
 
@@ -46,7 +48,7 @@ const AddService = () => {
                     setLoading(false);
                     toast("Service added!")
                     form.reset();
-                    navigate("/allServices", { replace: true });
+                    navigate("/ManageServices", { replace: true });
                 }
             })
             .catch(er => { setLoading(false); toast(er.message); });

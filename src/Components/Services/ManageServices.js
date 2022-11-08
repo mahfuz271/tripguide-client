@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Contexts/UserContext';
 import { toast } from 'react-toastify';
+import useDocumentTitle from '../../Layout/useDocumentTitle';
 
-const AllServices = () => {
+//Manage services
+const ManageServices = () => {
+    useDocumentTitle("Manage services");
     const { user, logOut, setLoading, loading } = useContext(AuthContext);
 
     const [services, setServices] = useState([])
@@ -181,4 +184,4 @@ const AllServices = () => {
     );
 };
 
-export default AllServices;
+export default ManageServices;
