@@ -11,7 +11,7 @@ const Footer = () => {
                     <li className="nav-item"><NavLink to="/services" className={inActiveClass}>Services</NavLink></li>
                     <li className="nav-item"><NavLink to="/blog" className={inActiveClass}>Blog</NavLink></li>
                 </ul>
-                <p className="text-center">© 2022 LearnCoding</p>
+                <p className="text-center">© 2022 TripGuide</p>
             </footer>
         </footer>
     );
