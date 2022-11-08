@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../Contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const AddService = () => {
-
-    const { user, setLoading, loading } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const { user, setLoading, loading, logOut } = useContext(AuthContext);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -12,13 +13,17 @@ const AddService = () => {
         const name = user?.displayName;
         const email = user?.email || 'unregistered';
         const title = form.title.value;
-        const image = form.title.image;
+        const image = form.image.value;
+        const price = form.price.value;
+        const description = form.description.value;
 
-        const order = {
+        const service = {
             title,
             image,
             customer: name,
-            email
+            email,
+            price,
+            description
         }
 
         setLoading(true);
@@ -28,15 +33,20 @@ const AddService = () => {
                 'content-type': 'application/json',
                 authorization: `Bearer ${localStorage.getItem('logged-token')}`
             },
-            body: JSON.stringify(order)
+            body: JSON.stringify(service)
         })
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 401 || res.status === 403) {
+                    return logOut();
+                }
+                return res.json();
+            })
             .then(data => {
                 if (data.acknowledged) {
                     setLoading(false);
                     toast("Service added!")
                     form.reset();
-
+                    navigate("/myServices", { replace: true });
                 }
             })
             .catch(er => { setLoading(false); toast(er.message); });
@@ -52,8 +62,16 @@ const AddService = () => {
                     <input className="form-control" id="exampleFormControlInput1" name='title' type="text" placeholder="" required="" />
                 </div>
                 <div className="form-group mt-4">
+                    <label className="form-label text-primary">Price</label>
+                    <input className="form-control" name='price' type="number" placeholder="" required="" />
+                </div>
+                <div className="form-group mt-4">
                     <label className="form-label text-primary" htmlFor="exampleFormControlInput2">Image URL</label>
-                    <input className="form-control" id="exampleFormControlInput2" name='image' type="url" placeholder="" required="" />
+                    <input className="form-control" id="exampleFormControlInput2" name='image' type="text" placeholder="" required="" />
+                </div>
+                <div className="form-group mt-4">
+                    <label className="form-label text-primary">Description</label>
+                    <textarea className="form-control" name='description' required></textarea>
                 </div>
                 <button className="btn btn-primary w-100 mt-5 submit-btn" type="submit" disabled={loading}>Submit</button>
             </form>

@@ -10,6 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import Logout from "../Components/Logout/Logout";
 import Services from "../Components/Services/Services";
 import AddService from "../Components/Services/AddService";
+import MyServices from "../Components/Services/MyServices";
 
 const Router = createBrowserRouter([
     {
@@ -48,6 +49,11 @@ const Router = createBrowserRouter([
             {
                 path: "/addService",
                 element: <PrivateRoute><AddService></AddService></PrivateRoute>
+            },
+
+            {
+                path: "/myServices",
+                element: <PrivateRoute><MyServices></MyServices></PrivateRoute>
             },
 
 
