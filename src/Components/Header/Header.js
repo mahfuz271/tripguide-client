@@ -20,7 +20,7 @@ const Header = () => {
                         <li><NavLink to="/" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Home</NavLink></li>
                         <li><NavLink to="/services" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Services</NavLink></li>
                         <li><NavLink to="/addService" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Add Service</NavLink></li>
-                        <li><NavLink to="/myServices" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>My Services</NavLink></li>
+                        <li><NavLink to="/AllServices" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Manage Services</NavLink></li>
                         <li><NavLink to="/blog" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Blog</NavLink></li>
                     </ul>
 

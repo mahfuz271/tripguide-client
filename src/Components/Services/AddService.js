@@ -27,7 +27,7 @@ const AddService = () => {
         }
 
         setLoading(true);
-        fetch(process.env.REACT_APP_SERVER_URL + '/myServices', {
+        fetch(process.env.REACT_APP_SERVER_URL + '/allServices', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -46,7 +46,7 @@ const AddService = () => {
                     setLoading(false);
                     toast("Service added!")
                     form.reset();
-                    navigate("/myServices", { replace: true });
+                    navigate("/allServices", { replace: true });
                 }
             })
             .catch(er => { setLoading(false); toast(er.message); });

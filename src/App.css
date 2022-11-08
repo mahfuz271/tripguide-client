@@ -71,6 +71,10 @@ footer * {
     color: #91929A !important;
 }
 
+.services {
+    height: 100%;
+    border: 2px solid #BBF0FF80;
+}
 @media screen and (min-width:992px) {
     .index-banner .container .row{
         min-height: 80vh;

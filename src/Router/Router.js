@@ -10,7 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import Logout from "../Components/Logout/Logout";
 import Services from "../Components/Services/Services";
 import AddService from "../Components/Services/AddService";
-import MyServices from "../Components/Services/MyServices";
+import AllServices from "../Components/Services/AllServices";
 
 const Router = createBrowserRouter([
     {
@@ -21,7 +21,7 @@ const Router = createBrowserRouter([
                 path: "/",
                 element: <Homepage />,
                 loader: () => {
-                    return fetch(`${process.env.REACT_APP_SERVER_URL}/services`);
+                    return fetch(`${process.env.REACT_APP_SERVER_URL}/services?limit=3`);
                 }
             },
             {
@@ -43,7 +43,10 @@ const Router = createBrowserRouter([
 
             {
                 path: "/services",
-                element: <Services></Services>
+                element: <Services></Services>,
+                loader: () => {
+                    return fetch(`${process.env.REACT_APP_SERVER_URL}/services`);
+                }
             },
 
             {
@@ -52,8 +55,8 @@ const Router = createBrowserRouter([
             },
 
             {
-                path: "/myServices",
-                element: <PrivateRoute><MyServices></MyServices></PrivateRoute>
+                path: "/allServices",
+                element: <PrivateRoute><AllServices></AllServices></PrivateRoute>
             },
 
 

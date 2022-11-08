@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Contexts/UserContext';
 import { toast } from 'react-toastify';
 
-const MyServices = () => {
+const AllServices = () => {
     const { user, logOut, setLoading, loading } = useContext(AuthContext);
 
     const [services, setServices] = useState([])
 
     useEffect(() => {
-        fetch(process.env.REACT_APP_SERVER_URL + `/myServices?email=${user?.email}`, {
+        fetch(process.env.REACT_APP_SERVER_URL + `/AllServices?email=${user?.email}`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('logged-token')}`
             }
@@ -27,7 +27,7 @@ const MyServices = () => {
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure, you want to cancel this order');
         if (proceed) {
-            fetch(process.env.REACT_APP_SERVER_URL + `/myServices/${id}`, {
+            fetch(process.env.REACT_APP_SERVER_URL + `/AllServices/${id}`, {
                 method: 'DELETE',
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('logged-token')}`
@@ -76,7 +76,7 @@ const MyServices = () => {
         }
 
         setLoading(true);
-        fetch(process.env.REACT_APP_SERVER_URL + `/myServices/${id}`, {
+        fetch(process.env.REACT_APP_SERVER_URL + `/AllServices/${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json',
@@ -181,4 +181,4 @@ const MyServices = () => {
     );
 };
 
-export default MyServices;
+export default AllServices;

@@ -8,7 +8,7 @@ const Services = () => {
         <div className='container'>
             <div className='row'>
                 <div className="col-md-12 mt-5">
-                    <ServiceBlock limit="9" title="Discover Our Courses" page="true"></ServiceBlock>
+                    <ServiceBlock title="Discover Our Courses"></ServiceBlock>
                 </div >
             </div>
         </div>

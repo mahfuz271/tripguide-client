@@ -1,5 +1,5 @@
 import React from 'react';
-import Services from '../Services/Services';
+import ServiceBlock from '../Services/ServiceBlock';
 import { Link } from 'react-router-dom';
 import useDocumentTitle from '../../Layout/useDocumentTitle';
 
@@ -27,7 +27,7 @@ const Homepage = () => {
             <div className='container'>
                 <div className='row'>
                     <div className="col-md-12 mt-5">
-                        <Services limit="3" title="Explore Destinations" page="false"></Services>
+                        <ServiceBlock title="Explore Destinations"></ServiceBlock>
                     </div>
                 </div>
             </div>
