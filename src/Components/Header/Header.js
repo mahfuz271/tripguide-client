@@ -3,31 +3,13 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../Contexts/UserContext';
 
 const Header = () => {
-    const [isMobile, setIsMobile] = useState(false);
-
-    //choose the screen size 
-    const handleResize = () => {
-        if (window.innerWidth < 768) {
-            setIsMobile(true)
-        } else {
-            setIsMobile(false)
-        }
-    }
-
-    // create an event listener
-    useEffect(() => {
-        window.addEventListener("resize", handleResize);
-        handleResize();
-    })
+    
     const { user } = useContext(AuthContext);
-    const location = useLocation();
     let activeClassName = "nav-link px-2 link-dark active-link";
     let inActiveClass = "nav-link px-2 link-dark";
-    let homeClass = "py-3 border-bottom active top-0 start-0";
-    let otherClass = "py-3 border-bottom";
 
     return (
-        <header className={location.pathname != '/' ? otherClass : (isMobile ? otherClass : homeClass)}>
+        <header className='py-3 border-bottom'>
             <div className="container">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
                     <Link to="/">
