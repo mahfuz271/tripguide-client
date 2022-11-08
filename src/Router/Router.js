@@ -9,6 +9,7 @@ import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import Logout from "../Components/Logout/Logout";
 import Services from "../Components/Services/Services";
+import AddService from "../Components/Services/AddService";
 
 const Router = createBrowserRouter([
     {
@@ -42,6 +43,11 @@ const Router = createBrowserRouter([
             {
                 path: "/services",
                 element: <Services></Services>
+            },
+
+            {
+                path: "/addService",
+                element: <PrivateRoute><AddService></AddService></PrivateRoute>
             },
 
 

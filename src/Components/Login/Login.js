@@ -11,21 +11,39 @@ const Login = () => {
     const location = useLocation();
     const [error, setError] = useState(null);
     const from = location.state?.from?.pathname || '/';
+    
+    const jwt = (result) => {
+        const user = result.user;
+
+        const currentUser = {
+            email: user.email
+        }
+
+        // get jwt token
+        fetch(process.env.REACT_APP_SERVER_URL + '/jwt', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(currentUser)
+        })
+            .then(res => res.json())
+            .then(data => {
+                // local storage is the easiest but not the best place to store jwt token
+                localStorage.setItem('logged-token', data.token);
+                setLoading(false);
+                toast("Login success!")
+                navigate(from, { replace: true });
+            });
+    }
+
 
     const handleGoogleSignIn = (event) => {
-        signInWithGoogle().then(() => {
-            setLoading(false);
-            toast("Login success!")
-            navigate(from);
-        })
+        signInWithGoogle().then(jwt)
             .catch(error => { toast(error.message); setLoading(false); });
     }
     const handleGithubSignIn = (event) => {
-        signInWithGithub().then(() => {
-            setLoading(false);
-            toast("Login success!")
-            navigate('/');
-        })
+        signInWithGithub().then(jwt)
             .catch(error => { toast(error.message); setLoading(false); });
     }
     const handleSubmit = event => {
@@ -51,12 +69,8 @@ const Login = () => {
 
         signIn(email, password)
             .then(result => {
-                const user = result.user;
-                console.log(user);
                 form.reset();
-                setLoading(false);
-                toast("Login Success!")
-                navigate(from, { replace: true })
+                jwt(result);
             })
             .catch(error => { toast(error.message); setLoading(false); });
     }

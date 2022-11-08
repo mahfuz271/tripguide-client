@@ -13,12 +13,13 @@ const Header = () => {
             <div className="container">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
                     <Link to="/">
-                        <img class="light-mode-item navbar-brand-item" src="/logo.png" alt="logo" height="45" />
+                        <img className="light-mode-item navbar-brand-item" src="/logo.png" alt="logo" height="45" />
                     </Link>
 
                     <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 main_menu">
                         <li><NavLink to="/" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Home</NavLink></li>
                         <li><NavLink to="/services" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Services</NavLink></li>
+                        <li><NavLink to="/addService" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Add Service</NavLink></li>
                         <li><NavLink to="/blog" className={(({ isActive }) => isActive ? activeClassName : inActiveClass)} end>Blog</NavLink></li>
                     </ul>
 

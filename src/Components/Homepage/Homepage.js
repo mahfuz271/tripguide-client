@@ -17,7 +17,7 @@ const Homepage = () => {
                                 <h1 className="banner-heading">My Daily Travel Blog To Inspire And Get You Motivated!</h1>
                                 <p className="banner-brief text-secondary mt-3 my-md-4 pt-1 py-3 pe-md-5">Hi! I'm <b>Paul Harrington</b> — an adventure travel photographer,
                                     professional blogger, and digital nomad.</p>
-                                <Link to="/services" className="btn btn-primary text-uppercase py-3">Explore Destinations</Link>
+                                <Link to="/services" className="btn btn-primary text-uppercase p-3">Explore Destinations</Link>
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@ const Homepage = () => {
             <div className='container'>
                 <div className='row'>
                     <div className="col-md-12 mt-5">
-                        <Services limit="3" title="Discover Our Popular Courses" page="false"></Services>
+                        <Services limit="3" title="Explore Destinations" page="false"></Services>
                     </div>
                 </div>
             </div>
