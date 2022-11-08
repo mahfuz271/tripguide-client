@@ -1,7 +1,9 @@
 import React from 'react';
 import ServiceBlock from '../Services/ServiceBlock';
+import useDocumentTitle from '../../Layout/useDocumentTitle';
 
 const Services = () => {
+    useDocumentTitle("Services");
     return (
         <div className='container'>
             <div className='row'>

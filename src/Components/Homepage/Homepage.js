@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Services from '../Services/Services';
+import useDocumentTitle from '../../Layout/useDocumentTitle';
 
 const Homepage = () => {
+    useDocumentTitle("TripGuide");
     return (
         <div>
             <div className='container'>

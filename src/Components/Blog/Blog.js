@@ -1,6 +1,8 @@
 import React from 'react';
+import useDocumentTitle from '../../Layout/useDocumentTitle';
 
 const Blog = () => {
+    useDocumentTitle("Blog");
     return (
         <div className='container mt-5'>
             <h1 className='text-center my-3 mb-5'>Blog</h1>

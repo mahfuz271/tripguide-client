@@ -2,8 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Contexts/UserContext';
 import { toast } from 'react-toastify';
+import useDocumentTitle from '../../Layout/useDocumentTitle';
 
 const Login = () => {
+    useDocumentTitle("Login");
     const { signIn, loading, setLoading, signInWithGoogle, signInWithGithub } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
