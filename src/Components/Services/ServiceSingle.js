@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLoaderData, useLocation } from 'react-router-dom';
 import useDocumentTitle from '../../Layout/useDocumentTitle';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
@@ -11,7 +11,15 @@ const ServiceSingle = () => {
     useDocumentTitle(service.title);
     const { user, logOut, setLoading, loading } = useContext(AuthContext);
 
-    const [reviews, setReviews] = useState([1, 2])
+    const [reviews, setReviews] = useState([])
+
+    const loadReview = () => {
+        fetch(process.env.REACT_APP_SERVER_URL + `/reviews/${service._id}`)
+            .then(res => res.json())
+            .then(data => setReviews(data));
+    }
+
+    useEffect(loadReview, [service])
 
 
     const handleRatingClick = event => {
@@ -34,20 +42,29 @@ const ServiceSingle = () => {
         const form = event.target;
         const service_id = form.service_id.value;
         const rating = parseInt(form.rating.value);
+        const title = form.title.value;
         const comment = form.comment.value;
+        let username = user?.displayName;
+        let email = user?.email;
+        let photoURL = user?.photoURL;
+
         if (rating < 1) {
             toast('Please rate our service');
             return false;
         }
         const review = {
             service_id,
+            title,
             comment,
             rating,
+            photoURL,
+            email,
+            username
         }
 
         setLoading(true);
         fetch(process.env.REACT_APP_SERVER_URL + `/addReview`, {
-            method: 'PATCH',
+            method: 'POST',
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${localStorage.getItem('logged-token')}`
@@ -62,8 +79,8 @@ const ServiceSingle = () => {
                 return res.json();
             })
             .then(data => {
-                console.log(data);
                 if (data.acknowledged) {
+                    loadReview();
                     toast('Review successfully');
                 } else {
                     toast('Error');
@@ -103,31 +120,26 @@ const ServiceSingle = () => {
                             (user?.email) ?
                                 <button data-bs-toggle="modal" data-bs-target="#exampleModal" type='button' className="btn btn-primary btn-sm">Write a review</button> :
                                 <Link to={{
-                                        pathname: "/login",
-                                        state: { from: location }
-                                    }} className="text-info">Please login to Write a review</Link>
+                                    pathname: "/login",
+                                    state: { from: location }
+                                }} className="text-info">Please login to Write a review</Link>
                         }
                     </div>
                 </div>
                 <div className="col-sm-12 mx-auto">
                     {reviews.map(r => {
-                        return <div className="review-block" key={r}>
+                        return <div className="review-block" key={r._id}>
                             <div className="row">
                                 <div className="col-sm-3 col-lg-1">
-                                    <img height="60" width="60" src="//dummyimage.com/60x60/666/ffffff&text=No+Image" className="img-rounded" />
-                                    <div className="review-block-name text-primary">nktailor</div>
-                                    <div className="review-block-date">January 29, 2016</div>
+                                    <img height="60" width="60" src={(r.photoURL)? r.photoURL: "//dummyimage.com/60x60/666/ffffff&text=No+Image"} className="img-rounded" />
+                                    <div className="review-block-name text-primary">{r.username}</div>
+                                    <div className="review-block-date">{r.created}</div>
                                 </div>
                                 <div className="col-sm-9 col-lg-11">
-                                    <div className="review-block-rate">
-                                        <i className="fa fa-star checked" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
-                                        <i className="fa fa-star" aria-hidden="true"></i>
+                                    <div className="review-block-rate" dangerouslySetInnerHTML={{ __html: rating_html(r.rating) }}>
                                     </div>
-                                    <div className="review-block-title">this was nice in buy</div>
-                                    <div className="review-block-description">this was nice in buy. this was nice in buy. this was nice in buy. this was nice in buy this was nice in buy this was nice in buy this was nice in buy this was nice in buy</div>
+                                    <div className="review-block-title">{r?.title}</div>
+                                    <div className="review-block-description">{r.comment}</div>
                                 </div>
                             </div>
                         </div>
@@ -146,6 +158,10 @@ const ServiceSingle = () => {
                             </div>
                             <div className="modal-body text-start">
                                 <input type="hidden" name="service_id" value={service._id} />
+                                <div className="form-group">
+                                    <label className="form-label text-primary" htmlFor="title">Title</label>
+                                    <input className="form-control" id="title" name='title' type="text" placeholder="" required="" />
+                                </div>
                                 <div className="form-group mt-4">
                                     <label className="form-label text-primary">Comment</label>
                                     <textarea className="form-control" name='comment' required></textarea>
@@ -174,5 +190,11 @@ const ServiceSingle = () => {
         </div>
     );
 };
-
+function rating_html(j) {
+    let html = '';
+    for (let i = 1; i < 6; i++) {
+        html += `<i class="fa fa-star ${i <= j ? 'checked' : ''}" aria-hidden="true"></i>`
+    }
+    return html;
+}
 export default ServiceSingle;
