@@ -25,7 +25,7 @@ const ServiceBlock = ({ title }) => {
                                 <h4>{c.title}</h4>
                                 <p>{c.description.slice(0, 150)}</p>
                                 <Link to={`/services/${c._id}`} className="btn btn-primary">
-                                    View details <i class="fa-solid fa-arrow-right"></i>
+                                    View details <i className="fa-solid fa-arrow-right"></i>
                                 </Link>
                             </div>
                         </div>

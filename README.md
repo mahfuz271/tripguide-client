@@ -5,6 +5,9 @@ React Assignment
 ## Features
 
 * Auth system with Google, Github and Email Password
+* Service add function with API
+* Service review option
+* Service and Reviews manage option
 * Blog, Error pages
 
 ## Frameworks & Libraries

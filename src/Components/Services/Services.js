@@ -8,7 +8,7 @@ const Services = () => {
         <div className='container'>
             <div className='row'>
                 <div className="col-md-12 mt-5">
-                    <ServiceBlock title="Discover Our Courses"></ServiceBlock>
+                    <ServiceBlock title="All Services"></ServiceBlock>
                 </div >
             </div>
         </div>

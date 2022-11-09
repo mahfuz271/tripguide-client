@@ -14,6 +14,11 @@ body {
     background-size: cover;
 }
 
+.index-banner.sec {
+    background-image: url(../public/img/about-bg-copyright.jpg);
+    background-position: bottom center;
+}
+
 .index-banner .container .row {
     padding-top: 3rem !important;
     padding-bottom: 3rem !important;

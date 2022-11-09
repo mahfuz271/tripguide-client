@@ -117,38 +117,42 @@ const MyReviews = () => {
 
     return (
         <div className='my-5 text-center container'>
-            <h2 className='mb-5'>You have {reviews.length} reviews</h2>
-            <div className="overflow-x-auto w-full row">
-                <table className="table w-full">
-                    <thead>
-                        <tr>
-                            <th>
-                            </th>
-                            <th className='text-start'>Title</th>
-                            <th className='text-start'>Rating</th>
-                            <th>Date</th>
-                            <th>Service</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            {reviews.length > 0 ?
+                <div className="overflow-x-auto w-full row">
+                    <h2 className='mb-5'>You have {reviews.length} reviews</h2>
+                    <table className="table w-full">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th className='text-start'>Title</th>
+                                <th className='text-start'>Rating</th>
+                                <th>Date</th>
+                                <th>Service</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                        {
-                            reviews.map(s => {
-                                return <tr key={s._id}>
-                                    <th>
-                                        <button onClick={() => handleDelete(s._id)} className='btn btn-danger'>X</button>
-                                        <button data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModify(s._id)} className='btn btn-info ms-2'><i className="fa fa-edit"></i></button>
-                                    </th>
-                                    <td className='text-start'>{s.title}</td>
-                                    <td className='text-start'>{s.rating}</td>
-                                    <td>{s?.created}</td>
-                                    <td><Link to={`/services/${s.service_id}`}>Go to service</Link></td>
-                                </tr>
-                            })
-                        }
-                    </tbody>
-                </table>
-            </div><div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
+                            {
+                                reviews.map(s => {
+                                    return <tr key={s._id}>
+                                        <th>
+                                            <button onClick={() => handleDelete(s._id)} className='btn btn-danger'>X</button>
+                                            <button data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModify(s._id)} className='btn btn-info ms-2'><i className="fa fa-edit"></i></button>
+                                        </th>
+                                        <td className='text-start'>{s.title}</td>
+                                        <td className='text-start'>{s.rating}</td>
+                                        <td>{s?.created}</td>
+                                        <td><Link to={`/services/${s.service_id}`}>Go to service</Link></td>
+                                    </tr>
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div> :
+                <p className='text-center'>No reviews were added</p>
+            }
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
                     <form className="modal-content" onSubmit={handleUpdate} id="updateform">
                         <div className="modal-header">
