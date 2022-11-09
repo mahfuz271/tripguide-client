@@ -9,7 +9,7 @@ const ServiceSingle = () => {
     const location = useLocation();
     const service = useLoaderData();
     useDocumentTitle(service.title);
-    const { user, logOut, setLoading, loading } = useContext(AuthContext);
+    const { user, logOut, setLoading, loading, handleRatingClick } = useContext(AuthContext);
 
     const [reviews, setReviews] = useState([])
 
@@ -20,22 +20,6 @@ const ServiceSingle = () => {
     }
 
     useEffect(loadReview, [service])
-
-
-    const handleRatingClick = event => {
-        const el = event.target;
-        let allBtn = document.querySelectorAll(".rating_star");
-        let rate_value = parseInt(el.getAttribute("value"));
-        for (let key = 0; key < allBtn.length; key++) {
-            let current = parseInt(allBtn[key].getAttribute("value"));
-            if (current <= rate_value) {
-                allBtn[key].classList.add("checked");
-            } else {
-                allBtn[key].classList.remove("checked");
-            }
-        }
-        document.getElementById("rating_star").value = rate_value;
-    }
 
     const handleReview = event => {
         event.preventDefault();
@@ -131,7 +115,7 @@ const ServiceSingle = () => {
                         return <div className="review-block" key={r._id}>
                             <div className="row">
                                 <div className="col-sm-3 col-lg-1">
-                                    <img height="60" width="60" src={(r.photoURL)? r.photoURL: "//dummyimage.com/60x60/666/ffffff&text=No+Image"} className="img-rounded" />
+                                    <img height="60" width="60" src={(r.photoURL) ? r.photoURL : "//dummyimage.com/60x60/666/ffffff&text=No+Image"} className="img-rounded" />
                                     <div className="review-block-name text-primary">{r.username}</div>
                                     <div className="review-block-date">{r.created}</div>
                                 </div>

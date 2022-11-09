@@ -12,6 +12,7 @@ import Services from "../Components/Services/Services";
 import AddService from "../Components/Services/AddService";
 import ManageServices from "../Components/Services/ManageServices";
 import ServiceSingle from "../Components/Services/ServiceSingle";
+import MyReviews from "../Components/MyReviews/MyReviews";
 
 const Router = createBrowserRouter([
     {
@@ -65,6 +66,10 @@ const Router = createBrowserRouter([
                 loader: ({ params }) => {
                     return fetch(`${process.env.REACT_APP_SERVER_URL}/services/${params.id}`);
                 }
+            },
+            {
+                path: "/MyReviews",
+                element: <PrivateRoute><MyReviews /></PrivateRoute>
             },
 
 

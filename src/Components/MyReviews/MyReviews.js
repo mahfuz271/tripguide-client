@@ -2,16 +2,17 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Contexts/UserContext';
 import { toast } from 'react-toastify';
 import useDocumentTitle from '../../Layout/useDocumentTitle';
+import { Link } from 'react-router-dom';
 
-//Manage services
-const ManageServices = () => {
-    useDocumentTitle("Manage services");
-    const { user, logOut, setLoading, loading } = useContext(AuthContext);
+//Manage MyReviews
+const MyReviews = () => {
+    useDocumentTitle("Manage MyReviews");
+    const { user, logOut, setLoading, loading, handleRatingClick } = useContext(AuthContext);
 
-    const [services, setServices] = useState([])
+    const [reviews, setReviews] = useState([])
 
     useEffect(() => {
-        fetch(process.env.REACT_APP_SERVER_URL + `/AllServices?email=${user?.email}`, {
+        fetch(process.env.REACT_APP_SERVER_URL + `/MyReviews?email=${user?.email}`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('logged-token')}`
             }
@@ -23,14 +24,14 @@ const ManageServices = () => {
                 return res.json();
             })
             .then(data => {
-                setServices(data);
+                setReviews(data);
             })
     }, [user?.email, logOut])
 
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure, you want to delete');
         if (proceed) {
-            fetch(process.env.REACT_APP_SERVER_URL + `/AllServices/${id}`, {
+            fetch(process.env.REACT_APP_SERVER_URL + `/MyReviews/${id}`, {
                 method: 'DELETE',
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('logged-token')}`
@@ -45,21 +46,23 @@ const ManageServices = () => {
                 .then(data => {
                     if (data.deletedCount > 0) {
                         toast('Deleted successfully');
-                        const remaining = services.filter(odr => odr._id !== id);
-                        setServices(remaining);
+                        const remaining = reviews.filter(odr => odr._id !== id);
+                        setReviews(remaining);
                     }
                 })
         }
     }
 
     const handleModify = id => {
-        const current = services.find(odr => odr._id === id);
+        const current = reviews.find(odr => odr._id === id);
         let form = document.getElementById('updateform');
         form._id.value = id;
-        form.image.value = current?.image || '';
         form.title.value = current?.title || '';
-        form.price.value = current?.price || '';
-        form.description.value = current?.description || '';
+        form.comment.value = current?.comment || '';
+        form.rating.value = current?.rating || '';
+        if (current?.rating) {
+            document.querySelectorAll('.rating_star')[current.rating - 1].click();
+        }
     }
 
     const handleUpdate = event => {
@@ -67,25 +70,23 @@ const ManageServices = () => {
         const form = event.target;
         const id = form._id.value;
         const title = form.title.value;
-        const image = form.image.value;
-        const price = form.price.value;
-        const description = form.description.value;
+        const comment = form.comment.value;
+        const rating = form.rating.value;
 
-        const service = {
+        const review = {
             title,
-            image,
-            price,
-            description
+            comment,
+            rating,
         }
 
         setLoading(true);
-        fetch(process.env.REACT_APP_SERVER_URL + `/AllServices/${id}`, {
+        fetch(process.env.REACT_APP_SERVER_URL + `/MyReviews/${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json',
                 authorization: `Bearer ${localStorage.getItem('logged-token')}`
             },
-            body: JSON.stringify(service)
+            body: JSON.stringify(review)
         })
             .then(res => {
                 if (res.status === 401 || res.status === 403) {
@@ -96,15 +97,14 @@ const ManageServices = () => {
             })
             .then(data => {
                 if (data.modifiedCount > 0) {
-                    const remaining = services.filter(odr => odr._id !== id);
-                    const updated = services.find(odr => odr._id === id);
+                    const remaining = reviews.filter(odr => odr._id !== id);
+                    const updated = reviews.find(odr => odr._id === id);
                     updated.title = title
-                    updated.image = image
-                    updated.price = price
-                    updated.description = description
+                    updated.comment = comment
+                    updated.rating = rating
 
-                    const newServices = [updated, ...remaining];
-                    setServices(newServices);
+                    const newreviews = [updated, ...remaining];
+                    setReviews(newreviews);
                     toast('Updated successfully');
                 }
                 form.reset();
@@ -117,65 +117,70 @@ const ManageServices = () => {
 
     return (
         <div className='my-5 text-center container'>
-            <h2 className='mb-5'>You have {services.length} Services</h2>
+            <h2 className='mb-5'>You have {reviews.length} reviews</h2>
             <div className="overflow-x-auto w-full row">
                 <table className="table w-full">
                     <thead>
                         <tr>
                             <th>
                             </th>
-                            <th>Image</th>
                             <th className='text-start'>Title</th>
-                            <th>Price</th>
+                            <th className='text-start'>Rating</th>
+                            <th>Date</th>
+                            <th>Service</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         {
-                            services.map(s => {
+                            reviews.map(s => {
                                 return <tr key={s._id}>
                                     <th>
                                         <button onClick={() => handleDelete(s._id)} className='btn btn-danger'>X</button>
                                         <button data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModify(s._id)} className='btn btn-info ms-2'><i className="fa fa-edit"></i></button>
                                     </th>
-                                    <td><img src={s.image} className="img-rounded" width="50" /></td>
                                     <td className='text-start'>{s.title}</td>
-                                    <td>${s?.price}</td>
+                                    <td className='text-start'>{s.rating}</td>
+                                    <td>{s?.created}</td>
+                                    <td><Link to={`/services/${s.service_id}`}>Go to service</Link></td>
                                 </tr>
                             })
                         }
                     </tbody>
                 </table>
-            </div>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
+            </div><div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
                     <form className="modal-content" onSubmit={handleUpdate} id="updateform">
                         <div className="modal-header">
-                            <h5 className="modal-title">Update Service</h5>
+                            <h5 className="modal-title">Update review</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body text-start">
+                            <input type="hidden" name="_id" id='_id' />
                             <div className="form-group">
-                                <input type="hidden" id="_id" name="_id" />
                                 <label className="form-label text-primary" htmlFor="title">Title</label>
                                 <input className="form-control" id="title" name='title' type="text" placeholder="" required="" />
                             </div>
                             <div className="form-group mt-4">
-                                <label className="form-label text-primary">Price</label>
-                                <input className="form-control" name='price' type="number" placeholder="" required="" />
+                                <label className="form-label text-primary">Comment</label>
+                                <textarea className="form-control" id='comment' name='comment' required></textarea>
                             </div>
-                            <div className="form-group mt-4">
-                                <label className="form-label text-primary" htmlFor="image">Image URL</label>
-                                <input className="form-control" id="image" name='image' type="text" placeholder="" required="" />
-                            </div>
-                            <div className="form-group mt-4">
-                                <label className="form-label text-primary">Description</label>
-                                <textarea className="form-control" name='description' required></textarea>
+                            <div className="form-group my-3">
+                                <div className="row m-0">
+                                    <input type="hidden" name="rating" id="rating_star" value="0" />
+                                    <div className="col-12 text-center" onClick={handleRatingClick}>
+                                        <span className="fa fa-star rating_star" value="1"></span>
+                                        <span className="fa fa-star rating_star" value="2"></span>
+                                        <span className="fa fa-star rating_star" value="3"></span>
+                                        <span className="fa fa-star rating_star" value="4"></span>
+                                        <span className="fa fa-star rating_star" value="5"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" id='modalCloseBs' data-bs-dismiss="modal">Close</button>
-                            <button type="submit" className="btn btn-primary" disabled={loading}>Save changes</button>
+                            <button type="submit" className="btn btn-primary" disabled={loading}>Save</button>
                         </div>
                     </form>
                 </div>
@@ -184,4 +189,4 @@ const ManageServices = () => {
     );
 };
 
-export default ManageServices;
+export default MyReviews;

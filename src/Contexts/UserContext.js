@@ -43,6 +43,22 @@ const UserContext = ({ children }) => {
         return signOut(auth);
     }
 
+    const handleRatingClick = event => {
+        const el = event.target;
+        let allBtn = document.querySelectorAll(".rating_star");
+        let rate_value = parseInt(el.getAttribute("value"));
+        for (let key = 0; key < allBtn.length; key++) {
+            let current = parseInt(allBtn[key].getAttribute("value"));
+            if (current <= rate_value) {
+                allBtn[key].classList.add("checked");
+            } else {
+                allBtn[key].classList.remove("checked");
+            }
+        }
+        document.getElementById("rating_star").value = rate_value;
+    }
+
+
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
@@ -53,7 +69,7 @@ const UserContext = ({ children }) => {
 
     }, [])
 
-    const authInfo = { user, loading, setLoading, createUser, updateUser, signIn, logOut, signInWithGoogle, signInWithGithub }
+    const authInfo = { handleRatingClick, user, loading, setLoading, createUser, updateUser, signIn, logOut, signInWithGoogle, signInWithGithub }
 
     return (
         <AuthContext.Provider value={authInfo}>
