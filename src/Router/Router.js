@@ -61,7 +61,7 @@ const Router = createBrowserRouter([
             },
             {
                 path: "/services/:id",
-                element: <PrivateRoute><ServiceSingle /></PrivateRoute>,
+                element: <ServiceSingle />,
                 loader: ({ params }) => {
                     return fetch(`${process.env.REACT_APP_SERVER_URL}/services/${params.id}`);
                 }

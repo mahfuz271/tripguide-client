@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData, useLocation } from 'react-router-dom';
 import useDocumentTitle from '../../Layout/useDocumentTitle';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { AuthContext } from '../../Contexts/UserContext';
 import { toast } from 'react-toastify';
 
 const ServiceSingle = () => {
+    const location = useLocation();
     const service = useLoaderData();
     useDocumentTitle(service.title);
     const { user, logOut, setLoading, loading } = useContext(AuthContext);
@@ -98,7 +99,14 @@ const ServiceSingle = () => {
                 <div className="col-sm-12 mx-auto my-5">
                     <div className='d-flex justify-content-between'>
                         <h2 className='m-0 p-0'>Reviews&nbsp;<span>({reviews.length})</span></h2>
-                        <button data-bs-toggle="modal" data-bs-target="#exampleModal" type='button' className="btn btn-primary btn-sm">Write a review</button>
+                        {
+                            (user?.email) ?
+                                <button data-bs-toggle="modal" data-bs-target="#exampleModal" type='button' className="btn btn-primary btn-sm">Write a review</button> :
+                                <Link to={{
+                                        pathname: "/login",
+                                        state: { from: location }
+                                    }} className="text-info">Please login to Write a review</Link>
+                        }
                     </div>
                 </div>
                 <div className="col-sm-12 mx-auto">
@@ -127,40 +135,42 @@ const ServiceSingle = () => {
                     }
                 </div>
             </div>
-
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog">
-                    <form className="modal-content" onSubmit={handleReview}>
-                        <div className="modal-header">
-                            <h5 className="modal-title">Write a review</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body text-start">
-                            <input type="hidden" name="service_id" value={service._id} />
-                            <div className="form-group mt-4">
-                                <label className="form-label text-primary">Comment</label>
-                                <textarea className="form-control" name='comment' required></textarea>
+            {
+                (user?.email) &&
+                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <form className="modal-content" onSubmit={handleReview}>
+                            <div className="modal-header">
+                                <h5 className="modal-title">Write a review</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div className="form-group my-3">
-                                <div className="row m-0">
-                                    <input type="hidden" name="rating" id="rating_star" value="0" />
-                                    <div className="col-12 text-center" onClick={handleRatingClick}>
-                                        <span className="fa fa-star rating_star" value="1"></span>
-                                        <span className="fa fa-star rating_star" value="2"></span>
-                                        <span className="fa fa-star rating_star" value="3"></span>
-                                        <span className="fa fa-star rating_star" value="4"></span>
-                                        <span className="fa fa-star rating_star" value="5"></span>
+                            <div className="modal-body text-start">
+                                <input type="hidden" name="service_id" value={service._id} />
+                                <div className="form-group mt-4">
+                                    <label className="form-label text-primary">Comment</label>
+                                    <textarea className="form-control" name='comment' required></textarea>
+                                </div>
+                                <div className="form-group my-3">
+                                    <div className="row m-0">
+                                        <input type="hidden" name="rating" id="rating_star" value="0" />
+                                        <div className="col-12 text-center" onClick={handleRatingClick}>
+                                            <span className="fa fa-star rating_star" value="1"></span>
+                                            <span className="fa fa-star rating_star" value="2"></span>
+                                            <span className="fa fa-star rating_star" value="3"></span>
+                                            <span className="fa fa-star rating_star" value="4"></span>
+                                            <span className="fa fa-star rating_star" value="5"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" id='modalCloseBs' data-bs-dismiss="modal">Close</button>
-                            <button type="submit" className="btn btn-primary" disabled={loading}>Save</button>
-                        </div>
-                    </form>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" id='modalCloseBs' data-bs-dismiss="modal">Close</button>
+                                <button type="submit" className="btn btn-primary" disabled={loading}>Save</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 };
